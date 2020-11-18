@@ -1,42 +1,92 @@
 <template>
-  <div class="qr">
-    <!-- <p class="error">{{ error }}</p> -->
+  <div :class="{ verified }" class="qr">
 
-    <!-- <p class="decode-result">Code: <b>{{ result }}</b></p> -->
 
-    <div v-if="loading" class="loading">
-      <div class="load" />
+
+    <div class="con-text">
+      <button @click="$router.push('/delivery/')" class="close">
+        <i class='bx bx-x'></i>
+      </button>
+      <div class="header">
+        <h2>
+          Escanear Código QR
+        </h2>
+      </div>
+      <div class="scan">
+        <div class="check">
+          <i class='bx bx-check'></i>
+        </div>
+        <div class="line"></div>
+        <div class="square square1"></div>
+        <div class="square square2"></div>
+        <div class="square square3"></div>
+        <div class="square square4"></div>
+      </div>
+
+      <div class="footer">
+        <p v-if="!verified">
+          Escanea el código QR de el cliente <br> al entregar o recibir el dinero
+        </p>
+        <p v-else>
+          Código QR escaneado con éxito
+        </p>
+      </div>
     </div>
-
-    <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit" />
+    <qrcode-stream :track="repaint" :camera="camera" @decode="onDecode" @init="onInit" />
   </div>
 </template>
 <script lang="ts">
-import { Action, State } from 'vuex-class'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 @Component
 export default class qr extends Vue {
   result: string = ''
   error: string = ''
-  camera: string = 'rear'
+  camera: string = 'auto'
+  // camera: string = 'front'
   noRearCamera: boolean = false
   noFrontCamera: boolean = false
   loading: boolean = false
+
+  @Prop({ type: Boolean }) verified: boolean
+
+  repaint (location, ctx) {
+    const {
+      topLeftCorner,
+      topRightCorner,
+      bottomLeftCorner,
+      bottomRightCorner,
+      // topLeftFinderPattern,
+      // topRightFinderPattern,
+      // bottomLeftFinderPattern
+    } = location
+
+    ctx.lineWidth  = 2 // instead of red
+    ctx.strokeStyle = '#ffda1a' // instead of red
+
+    ctx.beginPath()
+    ctx.moveTo(topLeftCorner.x, topLeftCorner.y)
+    ctx.lineTo(bottomLeftCorner.x, bottomLeftCorner.y)
+    ctx.lineTo(bottomRightCorner.x, bottomRightCorner.y)
+    ctx.lineTo(topRightCorner.x, topRightCorner.y)
+    ctx.lineTo(topLeftCorner.x, topLeftCorner.y)
+    ctx.closePath()
+
+    ctx.fillStyle = "rgba(255,218,26, 0.15)";
+    ctx.stroke()
+    ctx.fill()
+  }
 
   onDecode (result: any) {
     if (!result) {
       return
     }
     this.result = result
-    this.$notification({
-      title: 'Código QR Escaneado',
-      text: 'Los campos para efectuar la transferencia se llenaron automáticamente con el QR escaneado',
-      color: 'success'
-    })
-    setTimeout(() => {
-      this.$router.push('/transfer')
-      this.$emit('code')
-    }, 300)
+    // this.$notification({
+    //   title: 'Código QR Escaneado',
+    //   text: 'Operación finalizada con éxito',
+    console.log(result)
+    // })
+    this.$emit('decode', result)
   }
 
   async onInit (promise: any) {
@@ -63,6 +113,122 @@ export default class qr extends Vue {
 }
 </script>
 <style lang="sass" scoped>
+.close
+  position: absolute
+  left: 0px
+  top: 0px
+  margin: 10px
+  width: 50px
+  height: 50px
+  display: flex
+  align-items: center
+  justify-content: center
+  color: #fff
+  font-size: 1.7rem
+  background: transparent
+  border: 2px solid rgba(255,255,255,.15)
+  z-index: 300
+  border-radius: 20px
+.con-text
+  position: absolute
+  left: 0px
+  top: 0px
+  width: 100%
+  height: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  z-index: 1000
+  color: #ffffff
+  background: rgba(0,0,0,.4)
+  overflow: hidden
+  .header
+    position: absolute
+    top: 0px
+    z-index: 100
+    h2
+      text-align: center
+      font-weight: normal
+      padding: 25px
+      font-size: 1rem
+  .footer
+    z-index: 100
+    position: absolute
+    bottom: 0px
+    p
+      padding: 25px
+      font-size: 1rem
+      text-align: center
+      font-size: .7rem
+
+@keyframes line
+  0%
+    top: 0px
+    opacity: 0
+  50%
+    opacity: 1
+  100%
+    opacity: 0
+    top: 300px
+
+
+.scan
+  position: relative
+  width: 300px
+  min-width: 300px
+  height: 300px
+  min-height: 300px
+  z-index: 300
+  border: 300px solid rgba(0,0,0,.5)
+  box-sizing: content-box
+  z-index: 10
+  display: flex
+  align-items: center
+  justify-content: center
+  transition: all .3s ease
+  .check
+    position: absolute
+    opacity: 0
+    transform: scale(.4)
+    transition: all .3s ease
+    i
+      font-size: 5rem
+      color: -color(color)
+  .line
+    position: absolute
+    left: 5px
+    top: 0px
+    width: calc(100% - 10px)
+    height: 2px
+    background: -color(color)
+    animation: line 2s linear infinite
+    box-shadow: 0px 0px 25px 0px -color(color, .8)
+
+  .square
+    width: 26px
+    height: 26px
+    position: absolute
+    &.square1
+      left: 0px
+      top: 0px
+      border-left: 1px solid -color(color)
+      border-top: 1px solid -color(color)
+    &.square2
+      right: 0px
+      top: 0px
+      border-right: 1px solid -color(color)
+      border-top: 1px solid -color(color)
+    &.square3
+      right: 0px
+      bottom: 0px
+      border-right: 1px solid -color(color)
+      border-bottom: 1px solid -color(color)
+    &.square4
+      left: 0px
+      bottom: 0px
+      border-left: 1px solid -color(color)
+      border-bottom: 1px solid -color(color)
 // responsive
 .loading
   position: absolute
@@ -111,8 +277,25 @@ export default class qr extends Vue {
   top: 0px
   height: 100vh
   width: 100%
-  z-index: 10001
+  z-index: 1000
   background: -color('bg')
+  left: 0px
+  display: flex
+  align-items: center
+  justify-content: center
+  height: calc(var(--vh, 1vh) * 100)
+  &.verified
+    .check
+      opacity: 1
+      transform: scale(1)
+    .scan
+      min-width: 120px
+      min-height: 120px
+      width: 120px
+      height: 120px
+      border: 500px solid -color('color', .2)
+      .line
+        display: none
   header
     position: absolute
     top: 0px

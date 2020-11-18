@@ -1,33 +1,13 @@
 <template>
   <div class="app">
-    <reload />
-    <!-- <guide v-model="guide" /> -->
-    <OffLine v-if="$nuxt.isOffline" />
-    <!-- <Nuxt keep-alive /> -->
     <Nuxt />
-    <footerBar />
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import footerBar from '@/components/mobile/footerBar.vue'
-import navBar from '@/components/mobile/navBar.vue'
 import { State } from 'vuex-class'
-@Component({
-  components: {
-    footerBar,
-    navBar
-  }
-})
+@Component
 export default class name extends Vue {
-  guideActive: boolean = false
-
-  @State(state => state.guide) guide
-
-  handleActiveGuide() {
-    this.guideActive = true
-  }
-
   setHeight() {
     const vh = window.innerHeight * 0.01
     document.documentElement.style.setProperty('--vh', `${vh}px`)
@@ -37,10 +17,27 @@ export default class name extends Vue {
     }, 0)
   }
 
+  webSocket() {
+    // Crea una nueva conexión.
+    const socket = new WebSocket('ws://localhost:8080');
+
+    // Abre la conexión
+    socket.addEventListener('open', function (event) {
+        socket.send('Hello Server!');
+    });
+
+    // Escucha por mensajes
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server', event.data);
+    });
+  }
+
   mounted () {
     this.setHeight()
 
     window.addEventListener('resize', this.setHeight)
+
+    this.webSocket()
   }
 }
 </script>

@@ -57,21 +57,19 @@
           Iniciar Sesión
         </Button>
 
-        <nuxt-link
+        <!-- <nuxt-link
           to="/login/recover-password">
           ¿Olvidaste tu contraseña?
-        </nuxt-link>
+        </nuxt-link> -->
       </div>
-      <Button
+      <!-- <Button
         class="btn-create mt-6"
         block
         @click="$router.push('/createAccount/')"
       >
         Crear una Cuenta
-      </Button>
+      </Button> -->
     </div>
-
-    <nuxt-child />
   </div>
 </template>
 <script lang="ts">
@@ -79,7 +77,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { State, Mutation } from 'vuex-class'
 import axios from '~/plugins/axios'
 @Component({
-  middleware: ['new', 'hasAuthenticated'],
+  // middleware: ['hasAuthenticated'],
   layout: 'clean'
 })
 export default class login extends Vue {
@@ -101,7 +99,7 @@ export default class login extends Vue {
     }
     this.loading = true
 
-    axios.post('/login', {
+    axios.post('/login-admin', {
       email: this.form.numberEmail.toLowerCase(),
       password: this.form.password
     }).then(({ data }: any) => {
@@ -114,36 +112,17 @@ export default class login extends Vue {
 
       const token = data.info.token
       this.$cookies.set('token', token)
-
-      if (data.info.status_user_id == '1') {
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$router.push({
-              path: '/createAccount/step2',
-              query: {
-                check: 'true'
-              }
-            })
-          })
-        }, 300)
-      } else if (data.info.status_user_id == '2') {
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$router.push({
-              path: '/createAccount/step3',
-              query: {
-                check: 'true'
-              }
-            })
-          })
-        }, 300)
+      this.$cookies.set('authenticated', true)
+      this.$cookies.set('user_id', data.info.user_id)
+      if (data.info.type == 6) {
+        this.$cookies.set('delivery', true)
+        this.$nextTick(() => {
+          this.$router.push('/delivery/')
+        })
       } else {
-        this.$cookies.set('authenticated', true)
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$router.push('/')
-          })
-        }, 300)
+        this.$nextTick(() => {
+          this.$router.push('/')
+        })
       }
       this.loading = false
 

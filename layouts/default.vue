@@ -1,8 +1,6 @@
 <template>
   <div class="default-app">
-    <desktop-nav />
-    <sidebar />
-    <Nuxt keep-alive :keep-alive-props="{ exclude: ['index'] }" />
+    <Nuxt keep-alive />
   </div>
 </template>
 <style lang="sass">
