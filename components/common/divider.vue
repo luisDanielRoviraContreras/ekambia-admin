@@ -22,6 +22,7 @@ export default class divider extends Vue {}
   margin-top: 30px
   .con
     padding: 0px 15px
+    white-space: nowrap
   .line
     width: 50%
     height: 2px

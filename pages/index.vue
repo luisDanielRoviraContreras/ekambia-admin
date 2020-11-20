@@ -1,15 +1,15 @@
 <template>
   <div ref="page" class="index page">
-      index
+    <nuxt-child />
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { State, Mutation, Action } from 'vuex-class'
-import axios from '~/plugins/axios'
+
 @Component({
   name: 'index',
-  // middleware: 'authenticated',
+  middleware: 'authenticated',
   layout: ({ isMobile }) => isMobile ? 'mobile' : 'default',
 })
 export default class indexPage extends Vue {
@@ -19,5 +19,9 @@ export default class indexPage extends Vue {
 }
 </script>
 <style lang="sass">
-
+.page
+  background: -color(gray)
+  width: 100%
+  height: 100vh
+  position: relative
 </style>

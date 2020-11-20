@@ -1,5 +1,6 @@
 <template>
   <div class="delivery">
+    <logout />
     <nav-bar @click="$router.push('/')" />
     <div class="con-delivery">
       <h2>
@@ -11,7 +12,7 @@
         <load block height="147px" class="mt-6" />
       </div>
       <div v-else class="con-operations">
-        <div :class="{responsible: operation.responsible_in_id == getUserId, disabled: operation.responsible_in_id !== getUserId && (operation.status_location_delivery_in_id > 1 || status_location_delivery_out_id > 1)}" :key="i" v-for="(operation, i) in operations" class="operation">
+        <div :class="{responsible: operation.responsible_in_id == getUserId, disabled: operation.responsible_in_id !== getUserId && (operation.status_location_delivery_in_id > 1 || operation.status_location_delivery_out_id > 1)}" :key="i" v-for="(operation, i) in operations" class="operation">
           <template v-if="operation.type_operation_user_id == 3 && operation.status_operation_id == 1 && (operation.direction_in !== operation.direction_out)">
             <div @click="handleClickOperation(operation, 'in')">
               <!-- Recogida in -->
@@ -46,7 +47,7 @@
               </div>
             </div>
           </template>
-          <template v-if="operation.type_operation_ekambia_id == 3 && operation.status_operation_id == 2">
+          <template v-if="operation.type_operation_ekambia_id == 3 && operation.status_operation_id == 3">
             <div @click="handleClickOperation(operation, 'out')">
               <!-- Entrega out -->
               <header>
@@ -176,6 +177,7 @@ export default class delivery extends Vue {
 
     (window as any).Echo.channel('channel-ekambia').listen('UpdatedStatusOperation', (response) => {
       console.log('update - operations -- UpdatedStatusOperation')
+      this.getData()
     });
 
     (window as any).Echo.channel('channel-ekambia').listen('UpdatedStatusLocationDelivery', (response) => {

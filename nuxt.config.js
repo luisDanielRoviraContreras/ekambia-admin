@@ -32,13 +32,6 @@ export default {
     {src: '@/plugins/maps.client.js', ssr: false},
     {src: '@/plugins/qr.client.js', ssr: false},
   ],
-  /*
-  ** Auto import components
-  ** See https://nuxtjs.org/api/configuration-components
-  */
-  /*
-  ** Nuxt.js dev-modules
-  */
   buildModules: [
     '@nuxt/typescript-build',
     '@nuxtjs/style-resources',
