@@ -15,9 +15,12 @@
         <c-input readonly class="mt-6" v-model="data.coin_send.coin">
           Moneda
         </c-input>
-        <c-input readonly class="mt-6" v-model="data.num_reference">
+        <c-input v-if="data.num_reference" readonly class="mt-6" v-model="data.num_reference">
           Numero de referencia
         </c-input>
+        <input-file not-x v-if="presignedUrl" class="mt-6" :value="`${presignedUrl}`">
+          Comprobante transferencia bancaria
+        </input-file>
         <div class="con-switch">
           <c-switch v-model="hasCheck" /> <p>Listo! transferencia verificada</p>
         </div>
@@ -69,6 +72,7 @@ import axios from '~/plugins/axios'
 export default class operation extends Vue {
   hasCheck: boolean = false
   data: any = null
+  presignedUrl: any = null
   user: any = null
 
   handleVerifica() {
@@ -101,13 +105,15 @@ export default class operation extends Vue {
 
   getData() {
     axios.get(`/operador-operation-show/${this.$route.query.id}`).then(({data}) => {
-      console.log(data.info.operation)
+      console.log(data)
       this.data = data.info.operation
+      this.presignedUrl = data.info.presignedUrl
+      this.user = data.info.user
 
-      axios.get(`/user-show/${data.info.operation.user_id}`).then((user) => {
-        console.log(user.data.info)
-        this.user = user.data.info
-      })
+      // axios.get(`/user-show/${data.info.operation.user_id}`).then((user) => {
+      //   console.log(user.data.info)
+      //   this.user = user.data.info
+      // })
     })
   }
 

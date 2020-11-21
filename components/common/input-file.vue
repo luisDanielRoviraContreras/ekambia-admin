@@ -7,7 +7,7 @@
       <slot />
     </label>
     <div class="con-file">
-      <button @click="removeFile" v-if="src" class="remove">
+      <button v-show="!notX" @click="removeFile" v-if="src" class="remove">
         <i class='bx bx-x'></i>
       </button>
       <div v-if="user" v-show="!src" class="con-text">
@@ -43,11 +43,16 @@ export default class InputComponent extends Vue {
   @Prop({ type: Boolean }) danger!: boolean
   @Prop({ type: Boolean }) user!: boolean
   @Prop({ type: Boolean }) disabled!: boolean
+  @Prop({ type: Boolean }) notX!: boolean
 
   src: any = ''
 
   beforeEnter (el: any) {
     el.style.height = 0
+  }
+
+  mounted() {
+    this.src = this.value
   }
 
   removeFile() {
