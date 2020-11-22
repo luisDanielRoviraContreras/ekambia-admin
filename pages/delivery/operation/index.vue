@@ -59,7 +59,7 @@
     </div>
 
     <Button @click="handleNext" :disabled="isDisabled" yellow block>
-      Comenzar entrega
+      Iniciar Ruta
     </Button>
   </div>
 </template>

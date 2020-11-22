@@ -1,5 +1,9 @@
 
 export default {
+  server: {
+    port: 4000, // default: 3000
+    host: '0.0.0.0' // default: localhost
+  },
   components: true,
   mode: 'universal',
   router: {
