@@ -56,7 +56,6 @@ export default class operation extends Vue {
   data: any = null
   presignedUrl: any = null
   user: any = null
-
   handleClick() {
     this.$dialog({
       title: 'Código de verificación?',
