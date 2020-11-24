@@ -10,13 +10,13 @@
           {{ text }}
         </p>
         <div class="content-input">
-          <c-input yellow class="mt-3" v-if="input" v-model="inputValue" type="text">
-            Nombre
+          <c-input :class="{ center, code }" yellow class="mt-3" v-if="input" v-model="inputValue" type="text">
+            {{ placeholder }}
           </c-input>
         </div>
         <footer>
           <Button yellow @click="handleCancel">{{ textCancel }}</Button>
-          <Button @click="handleSuccess">{{ textSuccess }}</Button>
+          <Button :disabled="input ? !inputValue : false" @click="handleSuccess">{{ textSuccess }}</Button>
         </footer>
       </div>
     </div>
@@ -35,7 +35,10 @@ export default class dialogBase extends Vue {
   textCancel: string = 'Cancelar'
   textSuccess: string = 'Aceptar'
   input: boolean = false
+  center: boolean = false
+  code: boolean = false
   inputValue: any = ''
+  placeholder: any = 'Nombre'
 
   handleSuccess (evt) {
     if (this.success) {
@@ -92,6 +95,14 @@ export default class dialogBase extends Vue {
     position: absolute
     transition: all .25s ease
     max-width: 500px
+    .center
+      /deep/input
+        text-align: center !important
+    .code
+      /deep/input
+        font-size: 1.5rem
+        font-weight: bold
+        letter-spacing: 1rem
     footer
       display: flex
       align-items: center
@@ -107,6 +118,8 @@ export default class dialogBase extends Vue {
     font-weight: 600
     font-size: .85rem
     padding-top: 5px
+    text-align: center
+    padding-bottom: 5px
 // responsive
 
 @media (min-width: 812px)

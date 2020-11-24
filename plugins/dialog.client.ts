@@ -18,6 +18,9 @@ const dialog: any = (params: any = {}) => {
   params.textCancel && (instance.$data.textCancel = params.textCancel)
   params.textSuccess && (instance.$data.textSuccess = params.textSuccess)
   params.input && (instance.$data.input = params.input)
+  params.placeholder && (instance.$data.placeholder = params.placeholder)
+  params.center && (instance.$data.center = params.center)
+  params.code && (instance.$data.code = params.code)
 
   document.body.appendChild(instance.$mount().$el)
 
