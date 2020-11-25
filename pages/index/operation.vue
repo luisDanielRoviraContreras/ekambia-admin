@@ -24,7 +24,7 @@
         <div class="con-switch">
           <c-switch v-model="hasCheck" /> <p>Listo! transferencia verificada</p>
         </div>
-        <Button v-if="data.type_operation_ekambia_id !== 1" @click="handleVerifica" :disabled="!hasCheck" class="mt-6" block yellow>
+        <Button @click="handleVerifica" :disabled="isVerified ? isVerified : !hasCheck" class="mt-6" block yellow>
           Verificar
         </Button>
       </div>
@@ -52,13 +52,13 @@
         <c-input readonly class="mt-6" v-model="user.firstName">
           Nombre
         </c-input>
-        <c-input readonly class="mt-6" v-model="user.LastName">
+        <c-input readonly class="mt-6" v-model="user.lastName">
           Apellidos
         </c-input>
         <c-input readonly class="mt-6" v-model="user.dni">
           Documento de identidad
         </c-input>
-        <Button @click="handleClick" :disabled="data.type_operation_user_id == 1 ? !hasCheck : false" class="mt-6" block yellow>
+        <Button @click="handleClick" :disabled="data.type_operation_user_id == 1 ? !isVerified : false" class="mt-6" block yellow>
           Transferencia realizada
         </Button>
       </div>
@@ -71,6 +71,7 @@ import axios from '~/plugins/axios'
 @Component
 export default class operation extends Vue {
   hasCheck: boolean = false
+  isVerified: boolean = false
   data: any = null
   presignedUrl: any = null
   user: any = null
@@ -83,7 +84,10 @@ export default class operation extends Vue {
         axios.post(`statusoperation-update/${this.$route.query.id}`, {
           status_operation_id: 3
         }).then(() => {
-          this.$router.push('/')
+          this.isVerified = true
+          if (this.data.type_operation_ekambia_id !== 1) {
+            this.$router.push('/')
+          }
         })
       }
     })

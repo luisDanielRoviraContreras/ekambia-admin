@@ -33,13 +33,19 @@
         <c-input readonly class="mt-6" v-model="user.email">
           Correo electrónico
         </c-input>
-        <div class="con-switch">
+        <div v-if="data.type_operation_user_id == 2" class="con-switch">
           <c-switch v-model="hasGet" /> <p>Dinero recibido y verificado</p>
         </div>
-        <div class="con-switch">
-          <c-switch v-model="hasSend" /> <p>Dinero entregado al cliente</p>
+        <div v-if="data.type_operation_ekambia_id == 2" class="con-switch">
+          <c-switch  v-model="hasSend" /> <p>Dinero entregado al cliente</p>
         </div>
-        <Button @click="handleClick" :disabled="!hasSend || !hasGet" class="mt-6" block yellow>
+        <Button v-if="data.type_operation_user_id == 2 && data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend || !hasGet" class="mt-6" block yellow>
+          Finalizar Operación
+        </Button>
+        <Button v-else-if="data.type_operation_user_id == 2" @click="handleClick" :disabled="!hasGet" class="mt-6" block yellow>
+          Verificar
+        </Button>
+        <Button v-else-if="data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend" class="mt-6" block yellow>
           Finalizar Operación
         </Button>
       </div>
@@ -99,6 +105,7 @@ export default class operation extends Vue {
 
   getData() {
     axios.get(`/operador-operation-show/${this.$route.query.id}`).then(({data}) => {
+      console.log(data)
       this.data = data.info.operation
       this.presignedUrl = data.info.presignedUrl
       this.user = data.info.user

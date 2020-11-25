@@ -18,9 +18,6 @@
           <i class='bx bxs-phone' ></i>
         </a>
       </div>
-      <pre>
-        {{ position }}
-      </pre>
       <Button @click="handleClick" block yellow>
         Ya estoy en el lugar de entrega
       </Button>
