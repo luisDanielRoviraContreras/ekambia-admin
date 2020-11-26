@@ -64,8 +64,8 @@ export default class operation extends Vue {
   user: any = null
   handleClick() {
     this.$dialog({
-      title: 'Código de verificación?',
-      text: 'Ingresa el código de verificación proporcionado por el usuario?',
+      title: 'Código de verificación',
+      text: 'Ingresa el código de verificación proporcionado por el usuario',
       input: true,
       center: true,
       code: true,
