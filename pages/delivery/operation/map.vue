@@ -89,7 +89,9 @@ export default class maps extends Vue {
 
   handleClick() {
     this.$dialog({
-      title: 'Estas seguro de estar en el lugar de entrega?',
+      title: '¿Estas seguro de estar en el lugar de entrega?',
+      textCancel: 'No',
+      textSuccess: 'Si',
       success: () => {
         axios.post(`status-location-${this.$route.query.type == 'out' ? 'out' : 'in' }-delivery-update/${this.$route.query.id}`, {
           [`status_location_delivery_${this.$route.query.type == 'out' ? 'out' : 'in' }_id`]: 3,

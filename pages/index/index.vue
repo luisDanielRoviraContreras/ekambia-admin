@@ -3,12 +3,12 @@
     <logout />
     <nav-bar />
     <div class="con-btns">
-      <Button @click="$router.push('/')" :yellow="$route.name == 'index-index'"  >
+      <nuxt-link tag="button" to="/">
         Transferencia
-      </Button>
-      <Button @click="$router.push('/office')" :yellow="$route.name == 'index-index-office'" >
+      </nuxt-link>
+      <nuxt-link tag="button" to="/office">
         Presencial
-      </Button>
+      </nuxt-link>
     </div>
     <div class="con-items">
       <nuxt-child />
@@ -32,6 +32,19 @@ export default class operador extends Vue {
   button
     min-width: 150px
     margin: 0px 10px
+    padding: 13px
+    background: transparent
+    border: 0px
+    font-size: 1rem
+    font-weight: bold
+    border-radius: 18px
+    transition: all .25s ease
+    cursor: pointer
+    &:hover
+      background: -color(bg)
+    &.nuxt-link-exact-active
+      background: -color(black)
+      color: #fff
 .operador
   width: 100%
   height: 100vh

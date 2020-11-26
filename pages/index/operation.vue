@@ -79,7 +79,9 @@ export default class operation extends Vue {
   handleVerifica() {
     this.$dialog({
       title: 'Verificar transferencia',
-      text: 'Estas seguro de verificar esta transferencia?',
+      text: '¿Estas seguro de verificar esta transferencia?',
+      textCancel: 'No',
+      textSuccess: 'Si, seguro',
       success: () => {
         axios.post(`statusoperation-update/${this.$route.query.id}`, {
           status_operation_id: 3
@@ -95,8 +97,10 @@ export default class operation extends Vue {
 
   handleClick() {
     this.$dialog({
-      title: 'Transferencia realizada?',
-      text: 'Estas seguro de que la transferencia fue realizada con éxito?',
+      title: '¿Transferencia realizada?',
+      text: '¿Estas seguro de que la transferencia fue realizada con éxito?',
+      textCancel: 'No',
+      textSuccess: 'Si, seguro',
       success: () => {
         axios.post(`statusoperation-update/${this.$route.query.id}`, {
           status_operation_id: 4
