@@ -41,9 +41,9 @@ export default class operador extends Vue {
     transition: all .25s ease
     cursor: pointer
     &:hover
-      background: -color(bg)
+      background: #fff
     &.nuxt-link-exact-active
-      background: -color(black)
+      background: #000
       color: #fff
 .operador
   width: 100%
