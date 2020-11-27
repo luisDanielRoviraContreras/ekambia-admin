@@ -7,9 +7,11 @@
       No hay operaciones por procesar
     </div>
     <div v-else class="con-operations">
-      <div @click="handleClickOperation(operation)" :key="i" v-for="(operation, i) in operations" class="operation">
+      <div @click="handleClickOperation(operation)" :key="i" v-for="(operation, i) in operations" class="operation" :class="{ responsible: operation.responsible_in_id == getUserId }">
         <div class="text bank">
-          <i class='bx bx-transfer' ></i>
+          <i v-if="operation.type_operation_ekambia_id == 1 && operation.type_operation_user_id == 1" class='bx bx-transfer' ></i>
+          <i v-else-if="operation.type_operation_ekambia_id == 1" class='bx bx-down-arrow-alt'></i>
+          <i v-else-if="operation.type_operation_user_id == 1" class='bx bx-up-arrow-alt' ></i>
         </div>
         <div class="text">
           <h6>
@@ -71,6 +73,10 @@ import Echo from 'laravel-echo'
 export default class operadorTable extends Vue {
   operations: any = null
 
+  get getUserId() {
+    return this.$cookies.get('user_id') || 0
+  }
+
   handleClickOperation(operation: any) {
     this.$router.push({
       path: '/operation/',
@@ -82,6 +88,7 @@ export default class operadorTable extends Vue {
 
   getData() {
     axios.get(`/operador-operation`).then(({data}) => {
+      console.log(data)
       this.operations = data.info.data
     })
   }
@@ -139,6 +146,18 @@ export default class operadorTable extends Vue {
     align-items: center
     justify-content: flex-start
     margin-right: 10px
+    transition: all .25s ease
+    cursor: pointer
+    &.disabled
+      pointer-events: none
+      opacity: .5
+    &.responsible
+      border: 2px solid -color(color)
+      .con-icon
+        background: -color(color)
+        color: -color(black)
+    &:hover
+      background: -color(gray)
     .text
       padding: 10px
       flex: 1

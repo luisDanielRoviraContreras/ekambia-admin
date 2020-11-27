@@ -9,7 +9,7 @@
     <div v-else class="con-operations">
       <div @click="handleClickOperation(operation)" :key="i" v-for="(operation, i) in operations" class="operation">
         <div class="text bank">
-          <i class='bx bx-transfer' ></i>
+          <i class='bx bx-buildings'></i>
         </div>
         <div class="text">
           <h6>
@@ -29,7 +29,7 @@
         </div>
         <div class="text">
           <h6>
-            Monto transferido
+            Recibir
           </h6>
           <p>
             {{ operation.send }}
@@ -37,7 +37,7 @@
         </div>
         <div class="text">
           <h6>
-            Monto a enviar
+            Entregar
           </h6>
           <p>
             {{ operation.received }}
@@ -139,6 +139,10 @@ export default class operadorTable extends Vue {
     align-items: center
     justify-content: flex-start
     margin-right: 10px
+    transition: all .25s ease
+    cursor: pointer
+    &:hover
+      background: -color(gray)
     .text
       padding: 10px
       flex: 1

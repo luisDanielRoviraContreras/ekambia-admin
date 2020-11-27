@@ -6,6 +6,7 @@
       name=""
       :value="value"
       @input="handleInput"
+      :checked="checked"
     >
     <i class="bx bx-check" />
     <span class="circle" />
@@ -17,6 +18,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 @Component
 export default class SwitchElement extends Vue {
   @Prop({}) value: any
+  @Prop({}) checked: any
 
   handleInput(evt) {
     this.$emit('input', !this.value)

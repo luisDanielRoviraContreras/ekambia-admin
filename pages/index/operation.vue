@@ -1,6 +1,7 @@
 <template>
   <div class="operation">
     <nav-bar back @click="$router.push('/')" />
+    <view-image @close="srcView = null" v-if="srcView" :src="srcView" />
     <div v-if="data && user" class="con-operation">
       <div v-if="data.type_operation_user_id == 1" class="con-1 con">
         <h2>
@@ -18,15 +19,25 @@
         <c-input v-if="data.num_reference" readonly class="mt-6" v-model="data.num_reference">
           Numero de referencia
         </c-input>
-        <input-file not-x v-if="presignedUrl" class="mt-6" :value="`${presignedUrl}`">
+        <input-file @click="handleClickView" readonly not-x v-if="presignedUrl" class="mt-6" :value="`${presignedUrl}`">
           Comprobante transferencia bancaria
         </input-file>
-        <div class="con-switch">
-          <c-switch v-model="hasCheck" /> <p>Listo! transferencia verificada</p>
-        </div>
-        <Button @click="handleVerifica" :disabled="isVerified ? isVerified : !hasCheck" class="mt-6" block yellow>
-          Verificar
-        </Button>
+        <template v-if="data.status_operation_id < 3">
+          <div class="con-switch">
+            <c-switch v-model="hasCheck" /> <p>Listo! transferencia verificada</p>
+          </div>
+          <Button @click="handleVerifica" :disabled="isVerified ? isVerified : !hasCheck" class="mt-6" block yellow>
+            Verificar
+          </Button>
+        </template>
+        <template v-else>
+          <div class="con-switch">
+            <c-switch checked="true" /> <p>Listo! transferencia verificada</p>
+          </div>
+          <Button :disabled="true" class="mt-6" block yellow>
+            Verificada
+          </Button>
+        </template>
       </div>
       <div v-if="data.type_operation_ekambia_id == 1" class="con-2 con">
         <h2>
@@ -58,7 +69,10 @@
         <c-input readonly class="mt-6" v-model="user.dni">
           Documento de identidad
         </c-input>
-        <Button @click="handleClick" :disabled="data.type_operation_user_id == 1 ? !isVerified : false" class="mt-6" block yellow>
+        <Button v-if="data.status_operation_id >= 3" @click="handleClick" class="mt-6" block yellow>
+          Transferencia realizada
+        </Button>
+        <Button v-else @click="handleClick" :disabled="data.type_operation_user_id == 1 ? !isVerified : false" class="mt-6" block yellow>
           Transferencia realizada
         </Button>
       </div>
@@ -75,6 +89,12 @@ export default class operation extends Vue {
   data: any = null
   presignedUrl: any = null
   user: any = null
+  srcView: any = null
+
+  handleClickView(val) {
+    console.log(val)
+    this.srcView = val
+  }
 
   handleVerifica() {
     this.$dialog({
@@ -100,7 +120,7 @@ export default class operation extends Vue {
       title: '¿Transferencia realizada?',
       text: '¿Estas seguro de que la transferencia fue realizada con éxito?',
       textCancel: 'No',
-      textSuccess: 'Si, seguro',
+      textSuccess: 'Sí',
       success: () => {
         axios.post(`statusoperation-update/${this.$route.query.id}`, {
           status_operation_id: 4
@@ -117,6 +137,7 @@ export default class operation extends Vue {
       this.data = data.info.operation
       this.presignedUrl = data.info.presignedUrl
       this.user = data.info.user
+
 
       // axios.get(`/user-show/${data.info.operation.user_id}`).then((user) => {
       //   console.log(user.data.info)

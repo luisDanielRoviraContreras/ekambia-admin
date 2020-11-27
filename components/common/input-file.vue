@@ -2,6 +2,7 @@
   <div
     :class="{ danger, disabled }"
     class="con-input-file"
+    @click="handleClick"
   >
     <label v-if="$slots.default" :for="_uid">
       <slot />
@@ -23,7 +24,7 @@
       </div>
       <input
         :id="_uid"
-        :class="{ hasValue: value }"
+        :class="{ hasValue: value, readonly }"
         type="file"
         @change="processFile($event)"
       >
@@ -44,8 +45,13 @@ export default class InputComponent extends Vue {
   @Prop({ type: Boolean }) user!: boolean
   @Prop({ type: Boolean }) disabled!: boolean
   @Prop({ type: Boolean }) notX!: boolean
+  @Prop({ type: Boolean }) readonly!: boolean
 
   src: any = ''
+
+  handleClick() {
+    this.$emit('click', this.src)
+  }
 
   beforeEnter (el: any) {
     el.style.height = 0
@@ -208,6 +214,8 @@ export default class InputComponent extends Vue {
     height: 150px
     opacity: 0
     cursor: pointer
+    &.readonly
+      pointer-events: none
     &:read-only
      background: -color('bg-2')
      font-weight: bold
