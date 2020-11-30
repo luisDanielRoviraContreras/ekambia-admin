@@ -1,6 +1,6 @@
 <template>
   <div class="scan">
-    <qr :verified="verified" @decode="handleDecode" />
+    <qr :verified="verified" @decode="handleDecode" :data="data"/>
   </div>
 </template>
 <script lang="ts">

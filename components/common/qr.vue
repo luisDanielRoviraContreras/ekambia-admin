@@ -1,8 +1,5 @@
 <template>
   <div :class="{ verified }" class="qr">
-
-
-
     <div class="con-text">
       <button @click="$router.push('/delivery/')" class="close">
         <i class='bx bx-x'></i>
@@ -48,6 +45,7 @@ export default class qr extends Vue {
   loading: boolean = false
 
   @Prop({ type: Boolean }) verified: boolean
+  @Prop({ }) data: any
 
   repaint (location, ctx) {
     const {
