@@ -7,7 +7,7 @@
         Transferencia
       </nuxt-link>
       <nuxt-link tag="button" to="/office">
-        Presencial
+        En Oficina
       </nuxt-link>
     </div>
     <div class="con-items">
