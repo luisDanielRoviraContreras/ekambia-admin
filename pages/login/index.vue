@@ -195,7 +195,10 @@ export default class login extends Vue {
     font-weight: 600
     margin-top: 20px
 // responsive
-
+@media (max-width: 812px)
+  .login
+    .con-slide
+      display: none
 @media (min-width: 812px)
    .login
     flex-direction: row

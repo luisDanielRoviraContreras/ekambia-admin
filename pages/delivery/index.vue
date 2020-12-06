@@ -6,6 +6,9 @@
       <h2>
         Operaciones de delivery
       </h2>
+      <div class="con-search">
+        <input v-model="search" @input="handleSearch" placeholder="Buscar operación por cedula de identidad" type="text">
+      </div>
       <div v-if="!operations" class="con-operations">
         <load block height="147px" class="mt-6" />
         <load block height="147px" class="mt-6" />
@@ -130,6 +133,20 @@ import Echo from 'laravel-echo'
 })
 export default class delivery extends Vue {
   operations: any = null
+  search: any = null
+
+  handleSearch() {
+    if (this.search) {
+      console.log(this.search)
+      axios.post(`/delivery-search`, {
+        value: this.search
+      }).then(({data}) => {
+        this.operations = data.info.data
+      })
+    } else {
+      this.getData()
+    }
+  }
 
   get getUserId() {
     return this.$cookies.get('user_id') || 0
@@ -198,6 +215,18 @@ export default class delivery extends Vue {
 }
 </script>
 <style lang="sass" scoped>
+.con-search
+  width: 100%
+  padding: 10px 0px
+  max-width: 1000px
+  padding-bottom: 0px
+  input
+    width: 100%
+    padding: 14px 20px
+    border: 0px
+    border-radius: 15px
+    &::placeholder
+      color: rgba(0,0,0,.4)
 .delivery
   width: 100%
   height: 100vh

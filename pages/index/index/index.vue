@@ -1,5 +1,8 @@
 <template>
   <div class="online-table">
+    <div class="con-search">
+      <input v-model="search" @input="handleSearch" placeholder="Buscar operación por cedula de identidad" type="text">
+    </div>
     <div v-if="!operations" class="con-operations">
       <load block />
     </div>
@@ -72,9 +75,23 @@ import Echo from 'laravel-echo'
 @Component
 export default class operadorTable extends Vue {
   operations: any = null
+  search: any = null
 
   get getUserId() {
     return this.$cookies.get('user_id') || 0
+  }
+
+  handleSearch() {
+    if (this.search) {
+      console.log(this.search)
+      axios.post(`/operador-search`, {
+        value: this.search
+      }).then(({data}) => {
+        this.operations = data.info.data
+      })
+    } else {
+      this.getData()
+    }
   }
 
   handleClickOperation(operation: any) {
@@ -120,11 +137,24 @@ export default class operadorTable extends Vue {
 }
 </script>
 <style lang="sass" scoped>
+.con-search
+  width: 100%
+  padding: 10px 0px
+  max-width: 1000px
+  input
+    width: 100%
+    padding: 14px 20px
+    border: 0px
+    border-radius: 15px
+    &::placeholder
+      color: rgba(0,0,0,.4)
+
 .online-table
   width: 100%
   display: flex
-  align-items: flex-start
-  justify-content: center
+  align-items: center
+  justify-content: flex-start
+  flex-direction: column
 .con-operations
   width: 100%
   max-width: 1000px
@@ -145,7 +175,6 @@ export default class operadorTable extends Vue {
     display: flex
     align-items: center
     justify-content: flex-start
-    margin-right: 10px
     transition: all .25s ease
     cursor: pointer
     &.disabled
