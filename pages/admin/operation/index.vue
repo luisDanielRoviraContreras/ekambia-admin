@@ -1,15 +1,15 @@
 <template>
   <div class="operation">
-    <nav-bar back @click="$router.push('/')" />
+    <nav-bar back @click="$router.push('/admin/')" />
     <view-image @close="srcView = null" v-if="srcView" :src="srcView" />
     <div v-if="data && user" class="con-operation">
       <div v-if="data.type_operation_user_id == 1" class="con-1 con">
         <h2>
           Transferencia entrante
         </h2>
-        <c-input readonly class="mt-6" v-model="data.source_account.alias">
+        <!-- <c-input readonly class="mt-6" v-model="data.source_account.alias">
           Banco
-        </c-input>
+        </c-input> -->
         <c-input readonly class="mt-6" v-model="data.send">
           Monto transferido
         </c-input>
@@ -39,13 +39,14 @@
           </Button>
         </template>
       </div>
+
       <div v-if="data.type_operation_ekambia_id == 1" class="con-2 con">
         <h2>
           Transferencia ekambia saliente
         </h2>
-        <c-input readonly class="mt-6" v-model="data.destination_account.alias">
+        <!-- <c-input readonly class="mt-6" v-model="data.destination_account.alias">
           Banco
-        </c-input>
+        </c-input> -->
         <c-input readonly class="mt-6" v-model="data.destination_account.account_number">
           Numero de cuenta
         </c-input>
@@ -75,6 +76,39 @@
         <Button v-else @click="handleClick" :disabled="data.type_operation_user_id == 1 ? !isVerified : false" class="mt-6" block yellow>
           Transferencia realizada
         </Button>
+      </div>
+
+      <div class="con-2 con">
+        <h2>
+          Operación presencial
+        </h2>
+
+        <divider>
+          Datos de operación
+        </divider>
+        <c-input readonly class="mt-6" :value="`${data.received} ${data.coin_received.coin}`">
+          Monto a entregar
+        </c-input>
+        <c-input readonly class="mt-6" :value="`${data.send} ${data.coin_send.coin}`">
+          Monto a recibir
+        </c-input>
+
+        <divider>
+          Datos del usuario
+        </divider>
+
+        <c-input readonly class="mt-6" v-model="user.firstName">
+          Nombre
+        </c-input>
+        <c-input readonly class="mt-6" v-model="user.lastName">
+          Apellidos
+        </c-input>
+        <c-input readonly class="mt-6" v-model="user.dni">
+          Documento de identidad
+        </c-input>
+        <c-input readonly class="mt-6" v-model="user.email">
+          Correo electrónico
+        </c-input>
       </div>
     </div>
   </div>
@@ -132,11 +166,15 @@ export default class operation extends Vue {
   }
 
   getData() {
-    axios.get(`/operador-operation-show/${this.$route.query.id}`).then(({data}) => {
+    axios.get(`/admin-operation-show/${this.$route.query.id}`).then(({data}) => {
       console.log(data)
       this.data = data.info.operation
       this.presignedUrl = data.info.presignedUrl
-      this.user = data.info.user
+      this.user = data.info.operation.user
+      // axios.get(`/user-show/${data.info.operation.user_id}`).then((user) => {
+      //   console.log(user.data.info)
+      //   this.user = user.data.info
+      // })
     })
   }
 
