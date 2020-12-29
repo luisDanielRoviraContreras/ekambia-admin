@@ -7,9 +7,9 @@
         <h2>
           Transferencia entrante
         </h2>
-        <c-input readonly class="mt-6" v-model="data.source_account.alias">
+        <!-- <c-input readonly class="mt-6" v-model="data.source_account.alias">
           Banco
-        </c-input>
+        </c-input> -->
         <c-input readonly class="mt-6" v-model="data.send">
           Monto transferido
         </c-input>
