@@ -42,9 +42,13 @@ export default class logout extends Vue {
     font-size: 1.5rem
     margin: 10px
     background: transparent
-    border: 2px solid -color(black)
+    border: 2px solid #000
     border-radius: 16px
     cursor: pointer
+    transition: all .25s ease
+    &:hover
+      background: #000
+      color: #fff
 // responsive
 
 @media (max-width: 812px)

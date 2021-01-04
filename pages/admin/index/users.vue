@@ -4,7 +4,7 @@
       <c-input block v-model="search" @input="handleInput" type="text">
         Buscar usuario
       </c-input>
-      <Button @click="$router.push('/admin/user/create')">
+      <Button class="ml-3" @click="$router.push('/admin/user/create')">
         Crear usuario
       </Button>
     </header>
