@@ -12,8 +12,12 @@
             Nombre
           </h6>
           <span>
-            {{ operation.user.firstName }}
-            {{ operation.user.lastName }}
+            <template v-if="operation.user">
+              {{ operation.user.firstName }}
+            </template>
+            <template v-if="operation.user">
+              {{ operation.user.lastName }}
+            </template>
           </span>
         </div>
         <div class="text" >
@@ -55,16 +59,28 @@ export default class operations extends Vue {
   operations: any = []
 
   handleClickOperation(operation: any) {
-    this.$router.push({
-      path: '/admin/operation',
-      query: {
-        id: operation.id
-      }
-    })
+    console.log(operation)
+    if (operation.type_operation_user_id == 1) {
+      this.$router.push({
+        path: '/operation/',
+        query: {
+          id: operation.id,
+          admin: 'true'
+        }
+      })
+    } else {
+      this.$router.push({
+        path: '/office-show/',
+        query: {
+          id: operation.id,
+          admin: 'true'
+        }
+      })
+    }
+
   }
 
   handleInput(val: any) {
-    console.log(val)
     this.getData(val)
   }
 
@@ -79,6 +95,7 @@ export default class operations extends Vue {
 
   getAllData(val: any = '') {
     axios.get('/all-operation').then(({data} : any) => {
+      console.log('data.info')
       console.log(data.info)
       this.operations = data.info.data
     })
@@ -99,11 +116,11 @@ export default class operations extends Vue {
   display: flex
   align-items: center
   justify-content: center
-  max-width: 700px
+  max-width: 800px
   width: 100%
 .con-operations
   width: 100%
-  max-width: 700px
+  max-width: 800px
   .operation
    width: 100%
    background: -color(gray)
@@ -117,8 +134,10 @@ export default class operations extends Vue {
    &:hover
      background: -color(gray-2)
    .text
-     padding: 15px
+     padding: 14px
      flex: 1
+     span
+       font-size: .9rem
 // responsive
 
 // @media (max-width: 812px), (pointer:none), (pointer:coarse)

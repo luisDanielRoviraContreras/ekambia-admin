@@ -59,6 +59,9 @@ export default class admin extends Vue {
 .con-sub-admin
   width: 100%
   padding: 20px
+  overflow: auto
+  max-height: calc(100vh - 102px)
+  padding-bottom: 50px
 // responsive
 
 // @media (max-width: 812px), (pointer:none), (pointer:coarse)

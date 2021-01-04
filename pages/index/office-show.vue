@@ -1,6 +1,6 @@
 <template>
   <div class="operation">
-    <nav-bar back @click="$router.push('/office')" />
+    <nav-bar absolute back @click="$route.query.admin ? $router.push('/admin/') : $router.push('/office')" />
     <div v-if="data && user" class="con-operation">
       <div class="con-2 con">
         <h2>
@@ -33,21 +33,30 @@
         <c-input readonly class="mt-6" v-model="user.email">
           Correo electrónico
         </c-input>
+        <template v-if="data.status_operation_id !== 4">
         <div v-if="data.type_operation_user_id == 2" class="con-switch">
           <c-switch v-model="hasGet" /> <p>Dinero recibido y verificado</p>
         </div>
         <div v-if="data.type_operation_ekambia_id == 2" class="con-switch">
           <c-switch  v-model="hasSend" /> <p>Dinero entregado al cliente</p>
         </div>
-        <Button v-if="data.type_operation_user_id == 2 && data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend || !hasGet" class="mt-6" block yellow>
-          Finalizar Operación
-        </Button>
-        <Button v-else-if="data.type_operation_user_id == 2" @click="handleClick" :disabled="!hasGet" class="mt-6" block yellow>
-          Verificar
-        </Button>
-        <Button v-else-if="data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend" class="mt-6" block yellow>
-          Finalizar Operación
-        </Button>
+          <Button v-if="data.type_operation_user_id == 2 && data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend || !hasGet" class="mt-6" block yellow>
+            Finalizar Operación
+          </Button>
+          <Button v-else-if="data.type_operation_user_id == 2" @click="handleClick" :disabled="!hasGet" class="mt-6" block yellow>
+            Verificar
+          </Button>
+          <Button v-else-if="data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend" class="mt-6" block yellow>
+            Finalizar Operación
+          </Button>
+        </template>
+        <template v-else>
+          <footer class="mt-6">
+            <h3>
+              Operación Finalizada
+            </h3>
+          </footer>
+        </template>
       </div>
     </div>
   </div>
@@ -95,7 +104,8 @@ export default class operation extends Vue {
             axios.post(`statusoperation-update/${this.$route.query.id}`, {
               status_operation_id:  id
             }).then(() => {
-              this.$router.push('/office')
+              this.$route.query.admin ? this.$router.push('/admin/') : this.$router.push('/office')
+              // this.$router.push('/office')
             })
           }
         })
@@ -118,6 +128,16 @@ export default class operation extends Vue {
 }
 </script>
 <style lang="sass" scoped>
+footer
+  width: 100%
+  display: flex
+  padding: 20px
+  align-items: center
+  justify-content: center
+  background: -color(gray)
+  border-radius: 20px
+  pointer-events: none
+  user-select: none
 .con-switch
   display: flex
   align-items: center
@@ -135,6 +155,9 @@ export default class operation extends Vue {
   height: 100vh
   background: -color(bg)
   flex-direction: column
+  overflow: auto
+  padding-bottom: 40px
+  padding-top: 70px
 .con-operation
   padding: 20px
   max-width: 1000px
@@ -145,6 +168,8 @@ export default class operation extends Vue {
   .con
     width: 50%
     padding: 0px 20px
+    h2
+      text-align: center
 // responsive
 
 // @media (max-width: 812px), (pointer:none), (pointer:coarse)

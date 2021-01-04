@@ -119,7 +119,7 @@ export default class login extends Vue {
         this.$nextTick(() => {
           this.$router.push('/delivery/')
         })
-      } else if (data.info.type == 3) {
+      } else if (data.info.type == 3 || data.info.type == 2) {
         this.$nextTick(() => {
           this.$router.push('/')
         })

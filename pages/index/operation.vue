@@ -1,6 +1,7 @@
 <template>
   <div class="operation">
-    <nav-bar back @click="$router.push('/')" />
+    <nav-bar v-if="!$route.query.prev" absolute back @click="$route.query.admin ? $router.push('/admin/') : $router.push('/')" />
+    <nav-bar v-else absolute back @click="$router.go(-1)" />
     <view-image @close="srcView = null" v-if="srcView" :src="srcView" />
     <div v-if="data && user" class="con-operation">
       <div v-if="data.type_operation_user_id == 1" class="con-1 con">
@@ -24,7 +25,7 @@
         </input-file>
         <template v-if="data.status_operation_id < 3">
           <div class="con-switch">
-            <c-switch v-model="hasCheck" /> <p>Listo! transferencia verificada</p>
+            <c-switch v-model="hasCheck"/> <p>Listo! transferencia verificada</p>
           </div>
           <Button @click="handleVerifica" :disabled="isVerified ? isVerified : !hasCheck" class="mt-6" block yellow>
             Verificar
@@ -32,7 +33,7 @@
         </template>
         <template v-else>
           <div class="con-switch">
-            <c-switch checked="true" /> <p>Listo! transferencia verificada</p>
+            <c-switch checked="true" :disabled="data.status_operation_id == 4" /> <p>Listo! transferencia verificada</p>
           </div>
           <Button :disabled="true" class="mt-6" block yellow>
             Verificada
@@ -69,12 +70,22 @@
         <c-input readonly class="mt-6" v-model="user.dni">
           Documento de identidad
         </c-input>
-        <Button v-if="data.status_operation_id >= 3" @click="handleClick" class="mt-6" block yellow>
-          Transferencia realizada
-        </Button>
-        <Button v-else @click="handleClick" :disabled="data.type_operation_user_id == 1 ? !isVerified : false" class="mt-6" block yellow>
-          Transferencia realizada
-        </Button>
+
+        <template v-if="data.status_operation_id !== 4">
+          <Button v-if="data.status_operation_id >= 3" @click="handleClick" class="mt-6" block yellow>
+            Transferencia realizada
+          </Button>
+          <Button v-else @click="handleClick" :disabled="data.type_operation_user_id == 1 ? !isVerified : false" class="mt-6" block yellow>
+            Transferencia realizada
+          </Button>
+        </template>
+        <template v-else>
+          <footer class="mt-6">
+            <h3>
+              Operación Finalizada
+            </h3>
+          </footer>
+        </template>
       </div>
     </div>
   </div>
@@ -125,7 +136,7 @@ export default class operation extends Vue {
         axios.post(`statusoperation-update/${this.$route.query.id}`, {
           status_operation_id: 4
         }).then(() => {
-          this.$router.push('/')
+          this.$route.query.admin ? this.$router.push('/admin/') : this.$router.push('/')
         })
       }
     })
@@ -146,6 +157,16 @@ export default class operation extends Vue {
 }
 </script>
 <style lang="sass" scoped>
+footer
+  width: 100%
+  display: flex
+  padding: 20px
+  align-items: center
+  justify-content: center
+  background: -color(gray)
+  border-radius: 20px
+  pointer-events: none
+  user-select: none
 .con-switch
   display: flex
   align-items: center
@@ -163,6 +184,9 @@ export default class operation extends Vue {
   height: 100vh
   background: -color(bg)
   flex-direction: column
+  overflow: auto
+  padding-bottom: 40px
+  padding-top: 70px
 .con-operation
   padding: 20px
   max-width: 1000px

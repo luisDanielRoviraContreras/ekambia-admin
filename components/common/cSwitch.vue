@@ -1,5 +1,5 @@
 <template>
-  <label class="switch">
+  <label :class="{ disabled }" class="switch">
     <input
       :id="_uid"
       type="checkbox"
@@ -19,6 +19,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 export default class SwitchElement extends Vue {
   @Prop({}) value: any
   @Prop({}) checked: any
+  @Prop({type: Boolean}) disabled: boolean
 
   handleInput(evt) {
     this.$emit('input', !this.value)
@@ -38,6 +39,9 @@ export default class SwitchElement extends Vue {
   overflow: hidden
   display: flex
   align-items: center
+  &.disabled
+    pointer-events: none
+    opacity: .5
   i
     position: absolute
     left: 0px
