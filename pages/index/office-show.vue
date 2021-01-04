@@ -4,7 +4,7 @@
     <div v-if="data && user" class="con-operation">
       <div class="con-2 con">
         <h2>
-          Operación presencial
+          Operación en oficina
         </h2>
 
         <divider>

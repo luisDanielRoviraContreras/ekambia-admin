@@ -23,7 +23,6 @@ export default class admin extends Vue {
 
   getData() {
     axios.get('/users').then(({data} : any) => {
-      console.log(data.info.data)
       this.users = data.info.data
     })
   }
@@ -48,7 +47,7 @@ export default class admin extends Vue {
     &:hover
       background: -color(gray-2)
     &.nuxt-link-exact-active
-      background: -color(black)
+      background: #000
       color: #fff
     &:last-child
       border-radius: 0px 20px 20px 0px

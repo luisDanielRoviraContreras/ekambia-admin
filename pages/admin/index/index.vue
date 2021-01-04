@@ -2,7 +2,7 @@
   <div class="operations">
     <header class="header">
       <c-input block v-model="search" @input="handleInput" type="text">
-        Buscar operación
+        Buscar operación por (Nombre, apellido o cedula)
       </c-input>
     </header>
     <div class="con-operations">
@@ -77,7 +77,6 @@ export default class operations extends Vue {
         }
       })
     }
-
   }
 
   handleInput(val: any) {
