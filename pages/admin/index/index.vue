@@ -7,6 +7,26 @@
     </header>
     <div class="con-operations">
       <div @click="handleClickOperation(operation)" class="operation" v-for="(operation, i) in operations" :key="i" >
+        <div :class="[`status${operation.status_operation_id}`]" class="text">
+          <h6>
+            Estatus
+          </h6>
+          <span v-if="operation.status_operation_id == 1">
+            Pagando
+          </span>
+          <span v-if="operation.status_operation_id == 2">
+            Verificando
+          </span>
+          <span v-if="operation.status_operation_id == 3">
+            Recibiendo
+          </span>
+          <span v-if="operation.status_operation_id == 4">
+            Finalizada
+          </span>
+          <span v-if="operation.status_operation_id == 5">
+            Denegada
+          </span>
+        </div>
         <div class="text" >
           <h6>
             Nombre
@@ -43,7 +63,7 @@
             Fecha
           </h6>
           <span>
-            {{ operation.datex }}
+            {{ operation.datex.split('-')[2] }}-{{ operation.datex.split('-')[1] }}-{{ operation.datex.split('-')[0] }}
           </span>
         </div>
       </div>
@@ -115,11 +135,11 @@ export default class operations extends Vue {
   display: flex
   align-items: center
   justify-content: center
-  max-width: 800px
+  max-width: 1200px
   width: 100%
 .con-operations
   width: 100%
-  max-width: 800px
+  max-width: 1200px
   .operation
    width: 100%
    background: -color(gray)
@@ -130,11 +150,32 @@ export default class operations extends Vue {
    display: flex
    align-items: center
    justify-content: flex-start
+   overflow: hidden
    &:hover
      background: -color(gray-2)
    .text
      padding: 14px
      flex: 1
+     &.status1
+       background: #5197f8
+       color: #fff
+       max-width: 100px
+     &.status2
+       background: #fb8137
+       color: #fff
+       max-width: 100px
+     &.status3
+       background: #6d44ff
+       color: #fff
+       max-width: 100px
+     &.status4
+       background: #00d34f
+       color: #fff
+       max-width: 100px
+     &.status5
+       background: #f6525d
+       color: #fff
+       max-width: 100px
      span
        font-size: .9rem
 // responsive

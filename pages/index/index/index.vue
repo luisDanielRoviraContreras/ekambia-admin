@@ -11,18 +11,30 @@
     </div>
     <div v-else class="con-operations">
       <div @click="handleClickOperation(operation)" :key="i" v-for="(operation, i) in operations" class="operation" :class="{ responsible: operation.responsible_in_id == getUserId }">
-        <div class="text bank">
-          <i v-if="operation.type_operation_ekambia_id == 1 && operation.type_operation_user_id == 1" class='bx bx-transfer' ></i>
-          <i v-else-if="operation.type_operation_ekambia_id == 1" class='bx bx-down-arrow-alt'></i>
-          <i v-else-if="operation.type_operation_user_id == 1" class='bx bx-up-arrow-alt' ></i>
-        </div>
-        <div class="text">
+        <div :class="[`status${operation.status_operation_id}`]" class="text">
           <h6>
-            Id
+            Estatus
           </h6>
-          <p>
-            {{ operation.id }}
-          </p>
+          <span v-if="operation.status_operation_id == 1">
+            Pagando
+          </span>
+          <span v-if="operation.status_operation_id == 2">
+            Verificando
+          </span>
+          <span v-if="operation.status_operation_id == 3">
+            Recibiendo
+          </span>
+          <span v-if="operation.status_operation_id == 4">
+            Finalizada
+          </span>
+          <span v-if="operation.status_operation_id == 5">
+            Denegada
+          </span>
+        </div>
+        <div class="text bank">
+          <i title="Verificar y transferir" v-if="operation.type_operation_ekambia_id == 1 && operation.type_operation_user_id == 1" class='bx bx-transfer' ></i>
+          <i title="Transferencia saliente" v-else-if="operation.type_operation_ekambia_id == 1" class='bx bx-down-arrow-alt'></i>
+          <i title="Revisar transferencia" v-else-if="operation.type_operation_user_id == 1" class='bx bx-up-arrow-alt' ></i>
         </div>
         <div class="text">
           <h6>
@@ -38,6 +50,7 @@
           </h6>
           <p>
             {{ operation.send }}
+            {{ operation.coin_send.coin }}
           </p>
         </div>
         <div class="text">
@@ -46,6 +59,7 @@
           </h6>
           <p>
             {{ operation.received }}
+            {{ operation.coin_received.coin }}
           </p>
         </div>
         <div class="text">
@@ -61,7 +75,7 @@
             Fecha
           </h6>
           <p>
-            {{ operation.datex }}
+            {{ operation.datex.split('-')[2] }}-{{ operation.datex.split('-')[1] }}-{{ operation.datex.split('-')[0] }}
           </p>
         </div>
       </div>
@@ -140,7 +154,7 @@ export default class operadorTable extends Vue {
 .con-search
   width: 100%
   padding: 10px 0px
-  max-width: 1000px
+  max-width: 1200px
   input
     width: 100%
     padding: 14px 20px
@@ -157,7 +171,7 @@ export default class operadorTable extends Vue {
   flex-direction: column
 .con-operations
   width: 100%
-  max-width: 1000px
+  max-width: 1200px
   max-height: 100vh
   overflow: auto
   &.not-found
@@ -177,6 +191,7 @@ export default class operadorTable extends Vue {
     justify-content: flex-start
     transition: all .25s ease
     cursor: pointer
+    overflow: hidden
     &.disabled
       pointer-events: none
       opacity: .5
@@ -190,6 +205,26 @@ export default class operadorTable extends Vue {
     .text
       padding: 10px
       flex: 1
+      &.status1
+       background: #5197f8
+       color: #fff
+       max-width: 100px
+      &.status2
+        background: #fb8137
+        color: #fff
+        max-width: 100px
+      &.status3
+        background: #6d44ff
+        color: #fff
+        max-width: 100px
+      &.status4
+        background: #00d34f
+        color: #fff
+        max-width: 100px
+      &.status5
+        background: #f6525d
+        color: #fff
+        max-width: 100px
       &.bank
         flex: none
         border-right: 2px solid -color(gray)
