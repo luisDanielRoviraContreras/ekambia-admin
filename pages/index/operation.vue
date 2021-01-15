@@ -30,6 +30,7 @@
           <Button @click="handleVerifica" :disabled="isVerified ? isVerified : !hasCheck" class="mt-6" block yellow>
             Verificar
           </Button>
+
         </template>
         <template v-else>
           <div class="con-switch">
@@ -39,6 +40,9 @@
             Verificada
           </Button>
         </template>
+        <Button v-if="data.status_operation_id < 4" @click="handleClickRechazar" class="mt-6" block>
+          Rechazar Operación
+        </Button>
       </div>
       <div v-if="data.type_operation_ekambia_id == 1" class="con-2 con">
         <h2>
@@ -71,7 +75,7 @@
           Documento de identidad
         </c-input>
 
-        <template v-if="data.status_operation_id !== 4">
+        <template v-if="data.status_operation_id < 4">
           <Button v-if="data.status_operation_id >= 3" @click="handleClick" class="mt-6" block yellow>
             Transferencia realizada
           </Button>
@@ -102,8 +106,23 @@ export default class operation extends Vue {
   user: any = null
   srcView: any = null
 
+  handleClickRechazar() {
+    this.$dialog({
+      title: 'Rechazar operación',
+      text: '¿Estas seguro de rechazar esta operación?',
+      textCancel: 'No',
+      textSuccess: 'Si, seguro',
+      success: () => {
+        axios.post(`statusoperation-update/${this.$route.query.id}`, {
+          status_operation_id: 5
+        }).then(() => {
+          this.$router.push('/')
+        })
+      }
+    })
+  }
+
   handleClickView(val) {
-    console.log(val)
     this.srcView = val
   }
 

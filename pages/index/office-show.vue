@@ -33,21 +33,33 @@
         <c-input readonly class="mt-6" v-model="user.email">
           Correo electrónico
         </c-input>
-        <template v-if="data.status_operation_id !== 4">
+
+        <template v-if="data.status_operation_id < 4">
         <div v-if="data.type_operation_user_id == 2" class="con-switch">
           <c-switch v-model="hasGet" /> <p>Dinero recibido y verificado</p>
         </div>
         <div v-if="data.type_operation_ekambia_id == 2" class="con-switch">
           <c-switch  v-model="hasSend" /> <p>Dinero entregado al cliente</p>
         </div>
-          <Button v-if="data.type_operation_user_id == 2 && data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend || !hasGet" class="mt-6" block yellow>
+        <template v-if="(data.type_operation_user_id == 2 && data.type_operation_ekambia_id == 2) ? hasGet && hasSend : hasGet || hasSend ">
+          <divider>
+            Código de la operación
+          </divider>
+          <c-input center class="mt-6" v-model="code">
+            Código
+          </c-input>
+        </template>
+          <Button v-if="data.type_operation_user_id == 2 && data.type_operation_ekambia_id == 2" @click="handleCheck" :disabled="!hasSend || !hasGet || !code" class="mt-6" block yellow>
             Finalizar Operación
           </Button>
-          <Button v-else-if="data.type_operation_user_id == 2" @click="handleClick" :disabled="!hasGet" class="mt-6" block yellow>
+          <Button v-else-if="data.type_operation_user_id == 2" @click="handleCheck" :disabled="!hasGet || !code" class="mt-6" block yellow>
             Verificar
           </Button>
-          <Button v-else-if="data.type_operation_ekambia_id == 2" @click="handleClick" :disabled="!hasSend" class="mt-6" block yellow>
+          <Button v-else-if="data.type_operation_ekambia_id == 2" @click="handleCheck" :disabled="!hasSend || !code" class="mt-6" block yellow>
             Finalizar Operación
+          </Button>
+          <Button v-if="data.status_operation_id < 4" @click="handleClickRechazar" class="mt-6" block>
+            Rechazar Operación
           </Button>
         </template>
         <template v-else>
@@ -71,6 +83,24 @@ export default class operation extends Vue {
   data: any = null
   presignedUrl: any = null
   user: any = null
+  code: any = null
+
+  handleClickRechazar() {
+    this.$dialog({
+      title: 'Rechazar operación',
+      text: '¿Estas seguro de rechazar esta operación?',
+      textCancel: 'No',
+      textSuccess: 'Si, seguro',
+      success: () => {
+        axios.post(`statusoperation-update/${this.$route.query.id}`, {
+          status_operation_id: 5
+        }).then(() => {
+          this.$router.push('/')
+        })
+      }
+    })
+  }
+
   handleClick() {
     this.$dialog({
       title: 'Código de verificación',
@@ -81,33 +111,37 @@ export default class operation extends Vue {
       placeholder: 'Código de 4 dígitos',
       textSuccess: 'Verificar',
       success: (val) => {
-        axios.post(`codecheck/${this.$route.query.id}`, {
-          code_check: val
-        }).then(({data}: any) => {
-          if (data.message == 'Código inválido') {
-            this.$notification({
-              title: 'Código invalido',
-              text: 'El código proporcionado no es valido para esta operación, revisa el código e intenta de nuevo'
-            })
-          } else {
-            this.$notification({
-              title: 'Verificación exitosa',
-              text: 'Operación finalizada con éxito'
-            })
-            let id = 3
-            if (this.data.status_operation_id == 1 && this.data.type_operation_ekambia_id == 2) {
-              id = 4
-            }
-            if (this.data.status_operation_id == 3 && this.data.type_operation_ekambia_id == 2) {
-              id = 4
-            }
-            axios.post(`statusoperation-update/${this.$route.query.id}`, {
-              status_operation_id:  id
-            }).then(() => {
-              this.$route.query.admin ? this.$router.push('/admin/') : this.$router.push('/office')
-              // this.$router.push('/office')
-            })
-          }
+
+      }
+    })
+  }
+
+  handleCheck() {
+    axios.post(`codecheck/${this.$route.query.id}`, {
+      code_check: this.code
+    }).then(({data}: any) => {
+      if (data.message == 'Código inválido') {
+        this.$notification({
+          title: 'Código invalido',
+          text: 'El código proporcionado no es valido para esta operación, revisa el código e intenta de nuevo'
+        })
+      } else {
+        this.$notification({
+          title: 'Verificación exitosa',
+          text: 'Operación finalizada con éxito'
+        })
+        let id = 3
+        if (this.data.status_operation_id == 1 && this.data.type_operation_ekambia_id == 2) {
+          id = 4
+        }
+        if (this.data.status_operation_id == 3 && this.data.type_operation_ekambia_id == 2) {
+          id = 4
+        }
+        axios.post(`statusoperation-update/${this.$route.query.id}`, {
+          status_operation_id:  id
+        }).then(() => {
+          this.$route.query.admin ? this.$router.push('/admin/') : this.$router.push('/office')
+          // this.$router.push('/office')
         })
       }
     })

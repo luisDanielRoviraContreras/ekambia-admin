@@ -4,7 +4,7 @@
     <nav-bar />
     <ul class="menu">
       <nuxt-link tag="li" to="/admin/">Operaciones</nuxt-link>
-      <nuxt-link tag="li" to="/admin/users">Usuarios</nuxt-link>
+      <nuxt-link tag="li" to="/admin/users">Usuarios del sistema</nuxt-link>
       <nuxt-link tag="li" to="/admin/config">Configuración</nuxt-link>
     </ul>
     <div class="con-sub-admin">

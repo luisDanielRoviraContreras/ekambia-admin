@@ -27,11 +27,22 @@
             Denegada
           </span>
         </div>
+        <div class="text id">
+          <h6>Id</h6>
+          <span>{{ operation.id }}</span>
+        </div>
+        <div class="text bank">
+          <i title="Verificar y transferir" v-if="operation.type_operation_ekambia_id == 1 && operation.type_operation_user_id == 1" class='bx bx-transfer' ></i>
+          <i title="Transferencia saliente" v-else-if="operation.type_operation_ekambia_id == 1" class='bx bx-down-arrow-alt'></i>
+          <i title="Revisar transferencia" v-else-if="operation.type_operation_user_id == 1" class='bx bx-up-arrow-alt' ></i>
+          <i title="Oficina" v-else-if="operation.type_operation_user_id == 2" class='bx bx-buildings' ></i>
+          <i title="Oficina" v-else-if="operation.type_operation_ekambia_id == 2" class='bx bx-buildings' ></i>
+        </div>
         <div class="text" >
           <h6>
             Nombre
           </h6>
-          <span>
+          <span class="name">
             <template v-if="operation.user">
               {{ operation.user.firstName }}
             </template>
@@ -58,7 +69,7 @@
             {{ operation.coin_received.coin }}
           </span>
         </div>
-        <div class="text" >
+        <div class="text date" >
           <h6>
             Fecha
           </h6>
@@ -100,7 +111,11 @@ export default class operations extends Vue {
   }
 
   handleInput(val: any) {
-    this.getData(val)
+    if (val) {
+      this.getData(val)
+    } else {
+      this.getAllData()
+    }
   }
 
   getData(val: any = '') {
@@ -126,6 +141,21 @@ export default class operations extends Vue {
 }
 </script>
 <style lang="sass" scoped>
+.id
+ max-width: 50px
+.date
+ max-width: 130px
+.bank
+ max-width: 50px
+ display: flex
+ align-items: center
+ justify-content: center
+.name
+  max-width: 130px
+  display: block
+  white-space: nowrap
+  text-overflow: ellipsis
+  overflow: hidden
 .operations
   display: flex
   align-items: center
