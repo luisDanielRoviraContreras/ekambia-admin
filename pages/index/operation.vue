@@ -61,19 +61,35 @@
           Moneda
         </c-input>
 
-        <divider>
-          Datos del usuario
-        </divider>
 
-        <c-input readonly class="mt-6" v-model="user.firstName">
-          Nombre
-        </c-input>
-        <c-input readonly class="mt-6" v-model="user.lastName">
-          Apellidos
-        </c-input>
-        <c-input readonly class="mt-6" v-model="user.dni">
-          Documento de identidad
-        </c-input>
+        <template v-if="!user.company">
+          <divider>
+            Datos del usuario
+          </divider>
+          <c-input readonly class="mt-6" v-model="user.firstName">
+            Nombre
+          </c-input>
+          <c-input readonly class="mt-6" v-model="user.lastName">
+            Apellidos
+          </c-input>
+          <c-input readonly class="mt-6" v-model="user.dni">
+            Documento de identidad
+          </c-input>
+        </template>
+        <template v-else>
+          <divider>
+            Datos de la empresa
+          </divider>
+          <c-input readonly class="mt-6" v-model="user.company.business_name">
+            Nombre
+          </c-input>
+          <c-input readonly class="mt-6" v-model="user.company.representative_name">
+            Representante legal
+          </c-input>
+          <c-input readonly class="mt-6" v-model="user.company.ruc">
+            RUC
+          </c-input>
+        </template>
 
         <template v-if="data.status_operation_id < 4">
           <Button v-if="data.status_operation_id >= 3" @click="handleClick" class="mt-6" block yellow>

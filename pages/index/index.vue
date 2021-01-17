@@ -75,7 +75,7 @@ export default class operador extends Vue {
     span
       position: absolute
       top: -6px
-      background: #fff
+      background: -color(color)
       color: #000
       min-width: 20px
       border-radius: 7px

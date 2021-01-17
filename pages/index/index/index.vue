@@ -36,6 +36,14 @@
           <i title="Transferencia saliente" v-else-if="operation.type_operation_ekambia_id == 1" class='bx bx-down-arrow-alt'></i>
           <i title="Revisar transferencia" v-else-if="operation.type_operation_user_id == 1" class='bx bx-up-arrow-alt' ></i>
         </div>
+        <div class="text id">
+          <h6>
+            Id
+          </h6>
+          <p>
+            {{ operation.id }}
+          </p>
+        </div>
         <div class="text">
           <h6>
             Comprobante
@@ -70,7 +78,7 @@
             {{ operation.exchange_type }}
           </p>
         </div>
-        <div class="text">
+        <div class="text date">
           <h6>
             Fecha
           </h6>
@@ -233,6 +241,12 @@ export default class operadorTable extends Vue {
         display: flex
         align-items: center
         justify-content: center
+      &.id
+        min-width: 56px
+        flex: none
+      &.date
+        min-width: 120px
+        flex: none
 // responsive
 
 // @media (max-width: 812px), (pointer:none), (pointer:coarse)

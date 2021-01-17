@@ -34,7 +34,7 @@
         <div class="text bank">
           <i class='bx bx-buildings'></i>
         </div>
-        <div class="text">
+        <div class="text id">
           <h6>
             Id
           </h6>
@@ -42,20 +42,21 @@
             {{ operation.id }}
           </p>
         </div>
-        <div class="text">
+        <!-- <div class="text">
           <h6>
             Comprobante
           </h6>
           <p>
             {{ operation.num_reference }}
           </p>
-        </div>
+        </div> -->
         <div class="text">
           <h6>
             Recibir
           </h6>
           <p>
             {{ operation.send }}
+            {{ operation.coin_send.coin }}
           </p>
         </div>
         <div class="text">
@@ -64,6 +65,7 @@
           </h6>
           <p>
             {{ operation.received }}
+            {{ operation.coin_received.coin }}
           </p>
         </div>
         <div class="text">
@@ -74,7 +76,7 @@
             {{ operation.exchange_type }}
           </p>
         </div>
-        <div class="text">
+        <div class="text date">
           <h6>
             Fecha
           </h6>
@@ -224,6 +226,12 @@ export default class operadorTable extends Vue {
         display: flex
         align-items: center
         justify-content: center
+      &.id
+        min-width: 56px
+        flex: none
+      &.date
+        min-width: 120px
+        flex: none
 // responsive
 
 // @media (max-width: 812px), (pointer:none), (pointer:coarse)
