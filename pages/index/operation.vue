@@ -20,6 +20,9 @@
         <c-input v-if="data.num_reference" readonly class="mt-6" v-model="data.num_reference">
           Numero de referencia
         </c-input>
+        <c-input v-if="data.source_funds" readonly class="mt-6" v-model="data.source_funds">
+          Origen de los fondos
+        </c-input>
         <input-file @click="handleClickView" readonly not-x v-if="presignedUrl" class="mt-6" :value="`${presignedUrl}`">
           Comprobante transferencia bancaria
         </input-file>

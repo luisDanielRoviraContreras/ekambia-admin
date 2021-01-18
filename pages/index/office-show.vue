@@ -16,6 +16,9 @@
         <c-input readonly class="mt-6" :value="`${data.send} ${data.coin_send.coin}`">
           Monto a recibir
         </c-input>
+        <c-input v-if="data.source_funds" readonly class="mt-6" v-model="data.source_funds">
+          Origen de los fondos
+        </c-input>
 
         <divider>
           Datos del usuario
