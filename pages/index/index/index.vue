@@ -142,7 +142,7 @@ export default class operadorTable extends Vue {
         forceTLS: false,
     });
 
-    (window as any).Echo.channel('channel-ekambia').listen('UpdatedStatusOperation', (response) => {
+    (window as any).Echo.channel('channel-ekambia').listen('UpdatedOperationNew', (response) => {
       console.log('update - operations -- UpdatedStatusOperation')
       this.getData()
     });
