@@ -9,6 +9,9 @@
       <nuxt-link tag="button" to="/office">
         En Oficina <span v-if="office > 0">{{ office }}</span>
       </nuxt-link>
+      <nuxt-link tag="button" to="/ref">
+        Referidos <span v-if="office > 0">{{ office }}</span>
+      </nuxt-link>
     </div>
     <div class="con-items">
       <nuxt-child />
